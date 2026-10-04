@@ -20,6 +20,14 @@ _Avoid_: Button press, command, control
 An audio or visual signal that teaches when the player should perform the Primary Action.
 _Avoid_: Note, prompt, marker
 
+**Call-and-Response**:
+A rhythm pattern where the Microgame presents a Timing Cue phrase and the player echoes it with the Primary Action.
+_Avoid_: Simon says, repeat-after-me, cue sequence
+
+**Stamp Shift**:
+The first Microgame, where an office worker stamps forms in response to rhythmic cues.
+_Avoid_: Office level, stamp game, paperwork stage
+
 **Ace**:
 A judgment for an input that lands inside the strictest timing window.
 _Avoid_: Perfect
@@ -47,3 +55,19 @@ _Avoid_: Tutorial, onboarding
 **Rank**:
 The final performance result assigned after a scored Microgame.
 _Avoid_: Grade, rating
+
+**Try Again**:
+The lowest Rank, assigned when the player does not yet keep the Microgame's rhythm.
+_Avoid_: Failure, game over
+
+**Almost**:
+A Rank for a performance that understands the pattern but misses too many beats for a clean pass.
+_Avoid_: Close, weak pass
+
+**Solid**:
+A Rank for a competent performance with mostly correct timing.
+_Avoid_: Pass, clear
+
+**Superb**:
+The highest Rank, assigned for a highly accurate performance across the scored Microgame.
+_Avoid_: Perfect rank, excellent
