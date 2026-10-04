@@ -28,6 +28,10 @@ _Avoid_: Voice line, lyric, speech prompt
 A rhythm pattern where the Microgame presents a Timing Cue phrase and the player echoes it with the Primary Action.
 _Avoid_: Simon says, repeat-after-me, cue sequence
 
+**Phrase**:
+A short rhythmic unit made of one or more Timing Cues and expected Primary Actions.
+_Avoid_: Pattern, sequence, measure
+
 **Stamp Shift**:
 The first Microgame, where an office worker stamps forms in response to rhythmic cues.
 _Avoid_: Office level, stamp game, paperwork stage
@@ -56,6 +60,10 @@ _Avoid_: Fail, bad
 The allowed distance between a Primary Action and its target beat for a specific judgment.
 _Avoid_: Hitbox, tolerance, leniency
 
+**Weighted Score**:
+A score that gives more value to tighter judgments while still recognizing near hits.
+_Avoid_: Points, percentage, raw score
+
 **Practice**:
 A guided playable introduction that teaches the current Microgame before scored play begins.
 _Avoid_: Tutorial, onboarding
@@ -83,3 +91,15 @@ _Avoid_: Pass, clear
 **Superb**:
 The highest Rank, assigned for a highly accurate performance across the scored Microgame.
 _Avoid_: Perfect rank, excellent
+
+**Best Rank**:
+The highest Rank the player has achieved for the Microgame on the current browser.
+_Avoid_: High score, save data, record
+
+**Direct-File Launch**:
+Opening the game directly from `index.html` without a dev server.
+_Avoid_: Localhost, build preview, file mode
+
+**Playtest Note**:
+A short record of a real browser playthrough that confirms the timing, feedback, and restart path were exercised.
+_Avoid_: Test result, QA note, manual check
