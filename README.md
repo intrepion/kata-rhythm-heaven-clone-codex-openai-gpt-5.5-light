@@ -16,3 +16,10 @@ Controls:
 - Click or tap to stamp
 
 The current slice runs Practice, moves into a Scored Run, shows immediate stamp feedback, and ends on a Rank screen with restart.
+
+## Checks
+
+```sh
+npm test
+node --check game.js
+```

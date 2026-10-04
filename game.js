@@ -30,15 +30,38 @@
     RANK: "Rank"
   };
 
+  const TIMING_WINDOWS = {
+    ace: 55,
+    good: 110,
+    near: 180
+  };
+
+  const JUDGMENT_WEIGHT = {
+    Ace: 3,
+    Good: 2,
+    Early: 1,
+    Late: 1,
+    Miss: 0
+  };
+
+  const RANKS = ["Try Again", "Almost", "Solid", "Superb"];
+  const BEST_RANK_KEY = "stamp-shift-best-rank";
+
   function createGame(options) {
     const callbacks = options || {};
     return {
       mode: MODES.READY,
       phraseIndex: 0,
       phrases: [],
+      expectedAt: null,
+      judgedPhrase: false,
+      judgments: [],
       lastJudgment: "-",
       rank: null,
+      bestRank: readBestRank(callbacks.storage),
+      storage: callbacks.storage || null,
       timer: null,
+      audio: callbacks.audio || null,
       onChange: callbacks.onChange || function noop() {},
       onCue: callbacks.onCue || function noop() {},
       onStamp: callbacks.onStamp || function noop() {},
@@ -51,6 +74,9 @@
     game.mode = MODES.PRACTICE;
     game.phrases = PRACTICE_PHRASES.slice();
     game.phraseIndex = 0;
+    game.expectedAt = null;
+    game.judgedPhrase = false;
+    game.judgments = [];
     game.lastJudgment = "-";
     game.rank = null;
     game.onChange(game);
@@ -62,6 +88,9 @@
     game.mode = MODES.SCORED;
     game.phrases = SCORED_PHRASES.slice();
     game.phraseIndex = 0;
+    game.expectedAt = null;
+    game.judgedPhrase = false;
+    game.judgments = [];
     game.lastJudgment = "-";
     game.onChange(game);
     playCurrentPhrase(game);
@@ -76,7 +105,17 @@
       return;
     }
 
-    game.lastJudgment = game.mode === MODES.PRACTICE ? "Good" : "Ace";
+    if (game.judgedPhrase) {
+      return;
+    }
+
+    const now = currentTime(game);
+    const judgment = judgeOffset(now - game.expectedAt);
+    game.judgedPhrase = true;
+    game.lastJudgment = judgment;
+    if (game.mode === MODES.SCORED) {
+      game.judgments.push(judgment);
+    }
     game.onStamp(game.lastJudgment);
     game.onChange(game);
   }
@@ -93,18 +132,29 @@
     }
 
     const phrase = game.phrases[game.phraseIndex];
+    game.expectedAt = currentTime(game) + 820;
+    game.judgedPhrase = false;
+    scheduleCueAudio(game, phrase);
     game.onCue(phrase);
     game.onChange(game);
     game.timer = global.setTimeout(function advancePhrase() {
+      if (!game.judgedPhrase) {
+        game.lastJudgment = "Miss";
+        if (game.mode === MODES.SCORED) {
+          game.judgments.push("Miss");
+        }
+        game.onStamp("Miss");
+      }
       game.phraseIndex += 1;
       playCurrentPhrase(game);
-    }, 1150);
+    }, phrase.beats * 480);
   }
 
   function finishRun(game) {
     stopTimer(game);
     game.mode = MODES.RANK;
-    game.rank = "Solid";
+    game.rank = calculateRank(game.judgments);
+    game.bestRank = updateBestRank(game.storage, game.bestRank, game.rank);
     game.onRank(game.rank);
     game.onChange(game);
   }
@@ -113,6 +163,89 @@
     if (game.timer) {
       global.clearTimeout(game.timer);
       game.timer = null;
+    }
+  }
+
+  function judgeOffset(offsetMs) {
+    const distance = Math.abs(offsetMs);
+    if (distance <= TIMING_WINDOWS.ace) {
+      return "Ace";
+    }
+    if (distance <= TIMING_WINDOWS.good) {
+      return "Good";
+    }
+    if (distance <= TIMING_WINDOWS.near) {
+      return offsetMs < 0 ? "Early" : "Late";
+    }
+    return "Miss";
+  }
+
+  function calculateScore(judgments) {
+    const max = judgments.length * JUDGMENT_WEIGHT.Ace;
+    const total = judgments.reduce(function sum(score, judgment) {
+      return score + JUDGMENT_WEIGHT[judgment];
+    }, 0);
+
+    return {
+      total,
+      max,
+      percent: max === 0 ? 0 : Math.round((total / max) * 100)
+    };
+  }
+
+  function calculateRank(judgments) {
+    const score = calculateScore(judgments);
+    if (score.percent >= 89) {
+      return "Superb";
+    }
+    if (score.percent >= 65) {
+      return "Solid";
+    }
+    if (score.percent >= 30) {
+      return "Almost";
+    }
+    return "Try Again";
+  }
+
+  function compareRanks(left, right) {
+    return RANKS.indexOf(left) - RANKS.indexOf(right);
+  }
+
+  function readBestRank(storage) {
+    if (!storage) {
+      return null;
+    }
+
+    try {
+      const rank = storage.getItem(BEST_RANK_KEY);
+      return RANKS.includes(rank) ? rank : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function updateBestRank(storage, currentBest, rank) {
+    const best = currentBest && compareRanks(currentBest, rank) > 0 ? currentBest : rank;
+    if (storage) {
+      try {
+        storage.setItem(BEST_RANK_KEY, best);
+      } catch (error) {
+        return best;
+      }
+    }
+    return best;
+  }
+
+  function currentTime(game) {
+    if (game.audio && typeof game.audio.now === "function") {
+      return game.audio.now();
+    }
+    return global.performance && global.performance.now ? global.performance.now() : Date.now();
+  }
+
+  function scheduleCueAudio(game, phrase) {
+    if (game.audio && typeof game.audio.cue === "function") {
+      game.audio.cue(phrase);
     }
   }
 
@@ -131,8 +264,10 @@
     const impactText = doc.getElementById("impactText");
     const rankTitle = doc.getElementById("rankTitle");
     const rankSummary = doc.getElementById("rankSummary");
+    const bestRankLabel = doc.getElementById("bestRank");
 
     const game = createGame({
+      storage: global.localStorage,
       onChange: render,
       onCue: showCue,
       onStamp: showStamp,
@@ -143,6 +278,7 @@
       modeLabel.textContent = state.mode;
       phraseLabel.textContent = `${Math.min(state.phraseIndex + 1, state.phrases.length)}/${state.phrases.length}`;
       lastJudgment.textContent = state.lastJudgment;
+      bestRankLabel.textContent = state.bestRank || "-";
       forms.classList.toggle("moving", state.mode === MODES.PRACTICE || state.mode === MODES.SCORED);
       startPanel.classList.toggle("hidden", state.mode !== MODES.READY);
       rankPanel.classList.toggle("hidden", state.mode !== MODES.RANK);
@@ -164,8 +300,9 @@
     }
 
     function showRank(rank) {
+      const score = calculateScore(game.judgments);
       rankTitle.textContent = rank;
-      rankSummary.textContent = "You kept the forms moving. Tighten the beat for a Superb.";
+      rankSummary.textContent = `Weighted Score: ${score.percent}%. Best Rank: ${game.bestRank || rank}.`;
     }
 
     function handlePrimaryAction(event) {
@@ -200,6 +337,10 @@
 
   const api = {
     MODES,
+    TIMING_WINDOWS,
+    JUDGMENT_WEIGHT,
+    RANKS,
+    BEST_RANK_KEY,
     PRACTICE_PHRASES,
     SCORED_PHRASES,
     createGame,
@@ -207,6 +348,10 @@
     startScoredRun,
     restart,
     stamp,
+    judgeOffset,
+    calculateScore,
+    calculateRank,
+    updateBestRank,
     bootDocument
   };
 
