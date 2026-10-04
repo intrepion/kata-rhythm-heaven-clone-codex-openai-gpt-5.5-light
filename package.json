@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "browser:test": "playwright test",
     "test": "node --test tests/*.test.js",
-    "check": "node --check game.js && npm test"
+    "check": "node --check game.js && npm test && npm run browser:test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.2"
   }
 }

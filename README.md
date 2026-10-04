@@ -20,6 +20,12 @@ The current slice runs Practice, moves into a Scored Run, shows immediate stamp 
 ## Checks
 
 ```sh
+npm install
 npm test
 node --check game.js
+npm run browser:test
 ```
+
+## Playtest Note
+
+MVP verification covers direct `file://` launch, Practice, Scored Run, Rank, restart, and browser console errors through Playwright. A hands-on browser pass should still listen for whether the cue-to-stamp beat feels fair before expanding to more microgames.

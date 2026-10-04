@@ -250,6 +250,7 @@
   }
 
   function bootDocument(doc) {
+    let audio = null;
     const startPanel = doc.getElementById("startPanel");
     const rankPanel = doc.getElementById("rankPanel");
     const startButton = doc.getElementById("startButton");
@@ -268,6 +269,16 @@
 
     const game = createGame({
       storage: global.localStorage,
+      audio: {
+        now: function now() {
+          return audio ? audio.context.currentTime * 1000 : currentPerformanceTime();
+        },
+        cue: function cue(phrase) {
+          if (audio) {
+            playCue(audio, phrase);
+          }
+        }
+      },
       onChange: render,
       onCue: showCue,
       onStamp: showStamp,
@@ -318,6 +329,7 @@
     }
 
     startButton.addEventListener("click", function start() {
+      audio = ensureAudio(audio);
       startPractice(game);
     });
     restartButton.addEventListener("click", function reset() {
@@ -333,6 +345,52 @@
 
     render(game);
     return game;
+  }
+
+  function currentPerformanceTime() {
+    return global.performance && global.performance.now ? global.performance.now() : Date.now();
+  }
+
+  function ensureAudio(existing) {
+    if (existing) {
+      if (existing.context.state === "suspended") {
+        existing.context.resume();
+      }
+      return existing;
+    }
+
+    const AudioContext = global.AudioContext || global.webkitAudioContext;
+    if (!AudioContext) {
+      return null;
+    }
+
+    const context = new AudioContext();
+    return { context };
+  }
+
+  function playTone(audio, at, frequency, duration, type) {
+    const oscillator = audio.context.createOscillator();
+    const gain = audio.context.createGain();
+    oscillator.type = type || "square";
+    oscillator.frequency.setValueAtTime(frequency, at);
+    gain.gain.setValueAtTime(0.0001, at);
+    gain.gain.exponentialRampToValueAtTime(0.12, at + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, at + duration);
+    oscillator.connect(gain);
+    gain.connect(audio.context.destination);
+    oscillator.start(at);
+    oscillator.stop(at + duration + 0.025);
+  }
+
+  function playCue(audio, phrase) {
+    const now = audio.context.currentTime;
+    const step = 0.18;
+    const syllables = phrase.cue.split(" ");
+    syllables.forEach(function scheduleSyllable(syllable, index) {
+      const isStamp = syllable.toUpperCase().includes("STAMP");
+      playTone(audio, now + index * step, isStamp ? 440 : 280 + index * 40, isStamp ? 0.12 : 0.08, isStamp ? "triangle" : "square");
+    });
+    playTone(audio, now + 0.82, 135, 0.05, "sawtooth");
   }
 
   const api = {
@@ -352,6 +410,7 @@
     calculateScore,
     calculateRank,
     updateBestRank,
+    ensureAudio,
     bootDocument
   };
 
