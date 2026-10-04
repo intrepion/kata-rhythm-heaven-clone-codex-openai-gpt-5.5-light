@@ -20,6 +20,10 @@ _Avoid_: Button press, command, control
 An audio or visual signal that teaches when the player should perform the Primary Action.
 _Avoid_: Note, prompt, marker
 
+**Vocal Cue**:
+A nonsense vocal Timing Cue whose rhythm teaches when the player should answer with the Primary Action.
+_Avoid_: Voice line, lyric, speech prompt
+
 **Call-and-Response**:
 A rhythm pattern where the Microgame presents a Timing Cue phrase and the player echoes it with the Primary Action.
 _Avoid_: Simon says, repeat-after-me, cue sequence
@@ -48,9 +52,17 @@ _Avoid_: Slow, delayed
 A judgment for a missing or badly timed input that fails the rhythm task.
 _Avoid_: Fail, bad
 
+**Timing Window**:
+The allowed distance between a Primary Action and its target beat for a specific judgment.
+_Avoid_: Hitbox, tolerance, leniency
+
 **Practice**:
 A guided playable introduction that teaches the current Microgame before scored play begins.
 _Avoid_: Tutorial, onboarding
+
+**Scored Run**:
+The ranked performance after Practice, lasting long enough to test learned rhythm without making restarts feel punishing.
+_Avoid_: Main mode, song, level run
 
 **Rank**:
 The final performance result assigned after a scored Microgame.
