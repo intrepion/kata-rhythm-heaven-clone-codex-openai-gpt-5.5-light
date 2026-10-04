@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stamp Shift</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell" aria-label="Stamp Shift rhythm game">
+      <section class="stage" aria-live="polite">
+        <div class="office-wall">
+          <div class="clock" aria-hidden="true">
+            <span></span>
+            <strong></strong>
+          </div>
+          <div class="poster">STAMP SHIFT</div>
+        </div>
+
+        <div class="supervisor" aria-hidden="true">
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="speech-bubble" id="cueBubble">ba...</div>
+        </div>
+
+        <div class="desk">
+          <div class="forms" id="forms">
+            <div class="form"></div>
+            <div class="form"></div>
+            <div class="form"></div>
+          </div>
+          <div class="worker" id="worker" aria-hidden="true">
+            <div class="worker-head"></div>
+            <div class="worker-body"></div>
+            <div class="stamp" id="stamp"></div>
+          </div>
+          <div class="impact-zone" id="impactZone">
+            <span id="impactText">Ready</span>
+          </div>
+        </div>
+
+        <div class="hud">
+          <div>
+            <span class="label">Mode</span>
+            <strong id="modeLabel">Ready</strong>
+          </div>
+          <div>
+            <span class="label">Phrase</span>
+            <strong id="phraseLabel">0/0</strong>
+          </div>
+          <div>
+            <span class="label">Last</span>
+            <strong id="lastJudgment">-</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="startPanel">
+        <p class="eyebrow">One button office rhythm</p>
+        <h1>Stamp Shift</h1>
+        <p class="lede">Listen for the nonsense cue, then stamp the form on the answer beat.</p>
+        <button id="startButton" type="button">Start Practice</button>
+        <p class="controls">Space, click, or tap to stamp.</p>
+      </section>
+
+      <section class="panel hidden" id="rankPanel">
+        <p class="eyebrow">Rank</p>
+        <h2 id="rankTitle">Solid</h2>
+        <p id="rankSummary">You kept the forms moving.</p>
+        <button id="restartButton" type="button">Restart</button>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
