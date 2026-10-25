@@ -1,5 +1,9 @@
 # Stamp Shift
 
+## Play online
+
+[Play Stamp Shift](https://intrepion.github.io/kata-rhythm-heaven-clone-codex-openai-gpt-5.5-light/) — free, playable in your browser.
+
 Stamp Shift is a static browser rhythm microgame inspired by Rhythm Heaven's one-button call-and-response timing. An office worker stamps forms after nonsense vocal cues, then earns a final Rank.
 
 ## Play
