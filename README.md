@@ -33,3 +33,7 @@ npm run browser:test
 ## Playtest Note
 
 MVP verification covers direct `file://` launch, Practice, Scored Run, Rank, restart, and browser console errors through Playwright. A hands-on browser pass should still listen for whether the cue-to-stamp beat feels fair before expanding to more microgames.
+
+## Arcade metadata
+
+See [docs/arcade-metadata.md](docs/arcade-metadata.md) for the game-owned manifest and screenshot provenance.
