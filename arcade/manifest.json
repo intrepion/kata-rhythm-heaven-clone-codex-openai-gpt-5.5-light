@@ -1,6 +1,47 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "gameId": "kata-rhythm-heaven-clone-codex-openai-gpt-5.5-light",
   "playUrl": "https://intrepion.github.io/kata-rhythm-heaven-clone-codex-openai-gpt-5.5-light/",
-  "screenshots": []
+  "screenshots": [
+    {
+      "path": "arcade/screenshots/ci-20261102-01.jpg",
+      "sha256": "318d775c54e0d063119920683ee18960a4fb80c2ef83bf6ac39d00a13383f1bd",
+      "alt": "Stamp Shift gameplay, view 1",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-01.png",
+        "sourceSha256": "afc6af1ad2746e1c6677591c97434f3f2eb663773b5bfac10d9c94c6b09f9461",
+        "captureCommit": "2bf9ed24bad85745c8b3b827aa25eecdb6e200af",
+        "workflowRunId": "41395779931",
+        "inputHashes": {
+          "index.html": "e1ef81d4580efeedf38ba2eb3d72daed2b5a22b98a7e19f5de9ff8e4536fc934",
+          "styles.css": "414f26ed185b18f3e0d9facbd1e4b4bbce1ac5fcf31474d8ff47701ffc96ba02",
+          "game.js": "3572e6d539ccc837809f725a0e41942f33033fa85ea0532c1a0a6529eed14a8e"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "a3cb891ebfbdc4f5b7f2cf243299b02cf8f71948cf2a96196a5f1628d17bb8e1"
+      }
+    },
+    {
+      "path": "arcade/screenshots/ci-20261102-02.jpg",
+      "sha256": "9b673a964aacb0da2b6af0becc2304d6b7cc1f39619d90e4f7c7da1cc3e48cf9",
+      "alt": "Stamp Shift gameplay, view 2",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-02.png",
+        "sourceSha256": "11eb8b296cc1582ef660f52b16fc6a8bb8d993fea9d9f9fa8e7c5661fcbcb408",
+        "captureCommit": "2bf9ed24bad85745c8b3b827aa25eecdb6e200af",
+        "workflowRunId": "41395779931",
+        "inputHashes": {
+          "index.html": "e1ef81d4580efeedf38ba2eb3d72daed2b5a22b98a7e19f5de9ff8e4536fc934",
+          "styles.css": "414f26ed185b18f3e0d9facbd1e4b4bbce1ac5fcf31474d8ff47701ffc96ba02",
+          "game.js": "3572e6d539ccc837809f725a0e41942f33033fa85ea0532c1a0a6529eed14a8e"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "a3cb891ebfbdc4f5b7f2cf243299b02cf8f71948cf2a96196a5f1628d17bb8e1"
+      }
+    }
+  ]
 }
